@@ -10,7 +10,7 @@ html(lang="en")
             nav.mainHeader__nav
                 ul.mainHeader__item-list
                     li.mainHeader__item
-                        a(href="/") Shop
+                        a(href="/" class=(path === "/" ? "active" : "")) Shop
                     li.mainHeader__item
                         a(href="/admin/add-product" class=(path === "/admin/add-product" ? "active" : "")) Add product
         block mainContent

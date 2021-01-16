@@ -8,7 +8,7 @@ const adminData = require('./admin');
 
 
 router.get('/' , (req, res, next) => {
-    res.render('shop' , {prods : adminData.products, docTitle : "My Shop"});
+    res.render('shop' , {prods : adminData.products, docTitle : "My Shop", path : "/"});
 })
 
 module.exports = router;
