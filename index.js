@@ -3,9 +3,10 @@ const { EPERM } = require('constants');
 const express = require('express');
 const app = express();
 const path = require('path');
-const adminData = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const rootDir = require('./utilities/path');
+const pageNotFoundController = require('./controllers/page-not-found.controller');
 
 //setting the view engine and view directory
 app.set('view engine' , 'ejs');
@@ -16,12 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(rootDir, 'public')))
 //routes
-app.use('/admin', adminData.routes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
-app.use('/', (req, res, next) => {
-    res.status(404).render('page-not-found' , {docTitle : "404 :: Not Found" , path : "/not-found"})
-});
+app.use('/' , pageNotFoundController);
 
 
 
