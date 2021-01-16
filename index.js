@@ -8,7 +8,7 @@ const shopRoutes = require('./routes/shop');
 const rootDir = require('./utilities/path');
 
 //setting the view engine and view directory
-app.set('view engine' , 'pug');
+app.set('view engine' , 'ejs');
 app.set('views' , './views');
 
 //middleware
@@ -20,7 +20,7 @@ app.use('/admin', adminData.routes);
 app.use(shopRoutes);
 
 app.use('/', (req, res, next) => {
-    res.status(404).render('page-not-found' , {docTitle : "404 :: Not Found"})
+    res.status(404).render('page-not-found' , {docTitle : "404 :: Not Found" , path : "/not-found"})
 });
 
 
