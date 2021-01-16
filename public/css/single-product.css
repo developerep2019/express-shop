@@ -1,0 +1,33 @@
+.product__item {
+    border : 1px solid gray;
+    width : 300px;
+    margin-bottom: 30px;
+    text-align: center;
+    display: inline-block;
+    margin-left: 30px;
+    border-radius: 5px;
+    padding : 5px;
+
+
+
+}
+
+.card__image img {
+    height : 300px;
+    width: 400px;
+    max-width: 100%;
+}
+
+button {
+    font: inherit;
+    border: 1px solid #3e00a1;
+    color: #3e00a1;
+    background-color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3e00a1;
+    color: white;
+}
