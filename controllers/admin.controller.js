@@ -11,9 +11,11 @@ module.exports.getAddProduct = (req, res, next) => {
 };
 
 module.exports.createAProduct = (req, res, next) => {
-    const product = new ProductObj(req.body.title);
+    const {title, imgUrl, description, price} = req.body;
+    //Sending Products to products.model
+    const product = new ProductObj(title, imgUrl, description, price);
     product.save();
-    res.redirect('/')
+    res.redirect('/');
 };
 
 //Getting all admin products

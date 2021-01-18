@@ -5,8 +5,12 @@ const p = path.join(process.mainModule.path , 'data' , 'products.json')
 
 
 module.exports = class Product {
-    constructor(t) {
-        this.title = t;
+    constructor(title, imageUrl, description, price) {
+        this.title = title;
+        this.imgUrl = imageUrl;
+        this.description = description;
+        this.price = price;
+
     };
     save() {      
         fs.readFile(p, (err, fileContent) => {
@@ -16,7 +20,9 @@ module.exports = class Product {
             } 
             products.push(this);
             fs.writeFile(p, JSON.stringify(products) , err => {
-                console.log(err)
+                if(err) {
+                    console.log(err)
+                }
             })
         })
 
