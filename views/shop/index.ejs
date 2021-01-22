@@ -22,7 +22,10 @@
                         <h2 class="product__price">$<%= prod.price %> </h2>
                         <p class="product__description"><%= prod.description %> </p>
                     </div>
-                    <div class="card__actions"></div><button class="btn">Add to Cart </button>
+                    <div class="card__actions">
+                        <%- include('../includes/add-to-cart', {prod : prod}) %> 
+
+                    </div>
                 </article>
                 <% })%>
             </div>

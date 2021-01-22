@@ -45,6 +45,15 @@ main {
     color: #3e00a1;
 }
 
+.centered {
+    text-align: center;
+}
+
+.centered div img{
+    width: 600px;
+    height: 600px;
+    margin: auto;
+}
 .product-form {
     width: 20rem;
     max-width: 90%;
