@@ -10,6 +10,7 @@ module.exports.getAddProduct = (req, res, next) => {
         });
 };
 
+//creating a product via this controller function
 module.exports.createAProduct = (req, res, next) => {
     const {title, imgUrl, description, price} = req.body;
     //Sending Products to products.model
