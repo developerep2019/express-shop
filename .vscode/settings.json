@@ -1,0 +1,7 @@
+{
+    "editor.fontSize": 16,
+    "editor.fontFamily": "\"Cascadia Code\"",
+    "editor.fontLigatures": false,
+    "emmet.excludeLanguages": [
+    ]
+}
