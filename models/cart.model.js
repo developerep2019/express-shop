@@ -11,7 +11,7 @@ module.exports = class Cart {
             let cart = { products: [], totalPrice: 0 };
             if (!err) {
                 cart = JSON.parse(fileContent);
-            }
+            };
             //analyze the cart -> find the existing product in cart
             const existingProductIndex = cart.products.findIndex(prod => prod.id === id);
             const existingProduct = cart.products[existingProductIndex];
@@ -32,5 +32,13 @@ module.exports = class Cart {
         })
 
 
+    }
+    static deleteProduct(id, totalPrice) {
+        fs.readFile(p, (err, fileContent) => {
+            if(err) {
+                return;
+            }
+            
+        })
     }
 }

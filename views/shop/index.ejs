@@ -1,39 +1,41 @@
 <%- include('../includes/head') %>
-    <link rel="stylesheet" href="/css/shop.css">
     <link rel="icon" href="https://image.freepik.com/free-vector/online-shop-logo-template_59362-81.jpg"
         type="image/jpg">
-    <link rel="stylesheet" href="/css/single-product.css">
-</head>
+    <link rel="stylesheet" href="/css/product.css">
+    </head>
 
-<body>
-    <%- include('../includes/navigation') %>
-    <main>
-        <% if (prods.length> 0) { %>
-            <div class="grid">
-                <% prods.map(prod => {  %>
-                <article class="card product__item">
-                    <header class="card__header">
-                        <h1 class="product__title"><%= prod.title %></h1>
-                    </header>
-                    <div class="card__image"><img
-                            src="<%= prod.imgUrl %> " alt="">
-                    </div>
-                    <div class="card__content">
-                        <h2 class="product__price">$<%= prod.price %> </h2>
-                        <p class="product__description"><%= prod.description %> </p>
-                    </div>
-                    <div class="card__actions">
-                        <%- include('../includes/add-to-cart', {prod : prod}) %> 
+    <body>
+        <%- include('../includes/navigation') %>
+            <main>
+                <% if (prods.length> 0) { %>
+                    <div class="">
+                        <% prods.map(prod=> { %>
+                            <div class="card-group">
+                                <div class="card">
+                                    <img class="card-img-top" src=<%=prod.imgUrl %>>
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <%= prod.title %>
+                                        </h5>
+                                        <p class="card-text">
+                                            <%= prod.description %>
+                                        </p>
+                                        <h4 class="card-text">Price : $<%= prod.price %>
+                                        </h4>
+                                    </div>
+                                    <div class="card-footer">
+                                        <%- include('../includes/add-to-cart', {prod : prod}) %>
+                                    </div>
+                                </div>
+                            </div>
+                                    <% })%>
 
-                    </div>
-                </article>
-                <% })%>
-            </div>
-            <% } else { %>
+                            </div>
+                            <% } else { %>
 
-                <h1>There is no products in your shop</h1>
+                                <h1>There is no products in your shop</h1>
 
-                <% } %>
+                                <% } %>
 
-    </main>
-<%- include('../includes/end')%>
+            </main>
+            <%- include('../includes/end')%>
