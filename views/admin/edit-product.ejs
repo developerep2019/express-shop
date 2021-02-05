@@ -25,13 +25,13 @@
                         </div>
                         <div class="form-group">
                             <label for="price">Price</label>
-                            <input type="number" class="form-control" placeholder="Enter Image Url" name="price"
+                            <input type="number" class="form-control" placeholder="Enter Price" name="price"
                                 value="<%if(editingMode){%><%=prod.price%><%}%>">
                         </div>
                         <% if(editingMode) {%>
                             <input type="hidden" value="<%=prod.id%>" name="productId">
                             <% } %>
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="btn btn-outline-success">
                                     <%=editingMode==="true" ? "Update Product" : "Add Product"%>
                                 </button>
                     </form>

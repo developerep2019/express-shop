@@ -38,7 +38,7 @@ module.exports.postEditProducts = (req, res, next) => {
     const { productId, imgUrl, title, description, price } = req.body;
     const updateProduct = new ProductModel(productId, title, imgUrl, description, price);
     updateProduct.save();
-    res.redirect('/admin/products'); 
+    res.redirect('/admin/products');
 }
 
 //creating a product via this controller function
@@ -46,8 +46,12 @@ module.exports.createAProduct = (req, res, next) => {
     const { title, imgUrl, description, price } = req.body;
     //Sending Products to products.model
     const product = new ProductModel(null, title, imgUrl, description, price);
-    product.save();
-    res.redirect('/');
+    product
+    .save()
+    .then(() => {
+        res.redirect('/')
+    })
+    .catch(err => console.log(err));
 };
 
 //Getting all admin products
@@ -65,4 +69,4 @@ module.exports.postDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
     ProductModel.deleteById(prodId);
     res.redirect('/admin/products');
-  };
+};
