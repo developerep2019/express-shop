@@ -6,6 +6,8 @@ const adminRoutes = require('./routes/admin.route');
 const shopRoutes = require('./routes/shop.route');
 const pageNotFoundController = require('./controllers/page-not-found.controller');
 
+const sequelize = require('./utilities/database');
+
 //setting the view engine and view directory
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -27,4 +29,8 @@ app.use(pageNotFoundController);
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log(`listening from port ${port}`));
+sequelize.sync()
+    .then(result => {
+        app.listen(port, () => console.log(`listening from port ${port}`));
+    })
+    .catch(err => console.log(err));

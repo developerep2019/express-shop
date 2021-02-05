@@ -1,5 +1,4 @@
 const ProductModel = require('../models/product.model');
-
 module.exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product',
         {
@@ -45,13 +44,16 @@ module.exports.postEditProducts = (req, res, next) => {
 module.exports.createAProduct = (req, res, next) => {
     const { title, imgUrl, description, price } = req.body;
     //Sending Products to products.model
-    const product = new ProductModel(null, title, imgUrl, description, price);
-    product
-    .save()
-    .then(() => {
-        res.redirect('/')
+    ProductModel.create({
+        title: title,
+        price: price,
+        imgUrl: imgUrl,
+        description: description
     })
-    .catch(err => console.log(err));
+        .then(result => {
+            res.redirect('/')
+        })
+        .catch(err => console.log(err));
 };
 
 //Getting all admin products
