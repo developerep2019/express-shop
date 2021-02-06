@@ -1,7 +1,6 @@
 //dependencies
 const express = require('express')
 const app = express();
-const path = require('path');
 const adminRoutes = require('./routes/admin.route');
 const shopRoutes = require('./routes/shop.route');
 const pageNotFoundController = require('./controllers/page-not-found.controller');

@@ -16,28 +16,35 @@ module.exports.getEditProduct = (req, res, next) => {
         return res.redirect('/')
     };
     const productId = req.params.productId;
-
-    ProductModel.fetchAll(products => {
-        if (!products) {
-            return res.redirect('/')
-        }
-        else {
-            const editableProduct = products.find(prod => prod.id === productId)
-            res.render('admin/edit-product', {
-                docTitle: `Edit Product :: ${editableProduct.title}`,
-                path: '/admin/edit-product',
-                editingMode: editMode,
-                prod: editableProduct
-            })
-        }
-    })
+    ProductModel.findByPk(productId)
+        .then(product => {
+            if (!product) {
+                return res.redirect('/')
+            }
+            else {
+                res.render('admin/edit-product', {
+                    editingMode: editMode,
+                    docTitle: "Edit Product",
+                    prod: product,
+                    path: '/edit-product'
+                })
+            }
+        })
+        .catch(err => console.log(err))
 };
 
 module.exports.postEditProducts = (req, res, next) => {
     const { productId, imgUrl, title, description, price } = req.body;
-    const updateProduct = new ProductModel(productId, title, imgUrl, description, price);
-    updateProduct.save();
-    res.redirect('/admin/products');
+    ProductModel.findByPk(productId)
+        .then(product => {
+            product.title = title;
+            product.imgUrl = imgUrl;
+            product.description = description;
+            product.price = price;
+            return product.save();
+        })
+        .then(result => res.redirect('/admin/products'))
+        .catch(err => consols.log(err))
 }
 
 //creating a product via this controller function
@@ -58,17 +65,27 @@ module.exports.createAProduct = (req, res, next) => {
 
 //Getting all admin products
 module.exports.getAllProductsAdmin = (req, res, next) => {
-    ProductModel.fetchAll(products => {
-        res.render('admin/products', {
-            docTitle: "welcome to express shop",
-            prods: products,
-            path: '/admin/products'
+    ProductModel.findAll()
+        .then((products) => {
+            res.render('admin/products', {
+                docTitle: `Admin Products`,
+                prods: products,
+                path: '/admin/products'
+            })
         })
-    })
+        .catch(err => console.log(err))
 };
 
 module.exports.postDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
-    ProductModel.deleteById(prodId);
-    res.redirect('/admin/products');
+    ProductModel.findByPk(prodId)
+        .then(product => {
+
+            return function () {
+                product.destroy();
+                res.redirect('/')
+            }();
+        })
+        .then(res => console.log("DELETED"))
+        .catch(err => console.log(err))
 };
