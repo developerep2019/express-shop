@@ -16,7 +16,7 @@ module.exports.getEditProduct = (req, res, next) => {
         return res.redirect('/')
     };
     const productId = req.params.productId;
-    ProductModel.findByPk(productId)
+    req.user.getProducts({ where: { id: productId } })
         .then(product => {
             if (!product) {
                 return res.redirect('/')
@@ -25,7 +25,7 @@ module.exports.getEditProduct = (req, res, next) => {
                 res.render('admin/edit-product', {
                     editingMode: editMode,
                     docTitle: "Edit Product",
-                    prod: product,
+                    prod: product[0],
                     path: '/edit-product'
                 })
             }
@@ -51,21 +51,21 @@ module.exports.postEditProducts = (req, res, next) => {
 module.exports.createAProduct = (req, res, next) => {
     const { title, imgUrl, description, price } = req.body;
     //Sending Products to products.model
-    ProductModel.create({
+    req.user.createProduct({
         title: title,
         price: price,
         imgUrl: imgUrl,
-        description: description
+        description: description,
     })
         .then(result => {
             res.redirect('/')
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err, 'loggin from error'));
 };
 
 //Getting all admin products
 module.exports.getAllProductsAdmin = (req, res, next) => {
-    ProductModel.findAll()
+    req.user.getProducts()
         .then((products) => {
             res.render('admin/products', {
                 docTitle: `Admin Products`,
