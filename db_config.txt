@@ -1,0 +1,13 @@
+node-complete course mongoDB configuration : 
+
+project name : node-complete
+cluster name : node-complete-cluster
+
+
+database user : node_complete_full
+database pass : WDNiGegCADkLaKZv
+
+
+uri : 
+
+mongodb+srv://node_complete_full:<password>@node-complete-cluster.spnkn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
