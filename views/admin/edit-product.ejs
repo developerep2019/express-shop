@@ -5,37 +5,39 @@
     <body>
         <%- include('../includes/navigation') %>
             <main>
-            <div class="d-flex align-items-center justify-content-center">
-                <div>
-                    <form class="product-form" style="width: 18rem;" action="/admin/<%= editingMode === "true" ? "edit-product" : "add-product"%>" method="POST">
-                        <div class="form-group">
-                            <label for="title">Title : </label>
-                            <input type="text" class="form-control" placeholder="Enter Product Title" name="title"
-                                value="<% if(editingMode) {%><%= prod.title %><% } %>">
-                        </div>
-                        <div class="form-group">
-                            <label for="imgUrl">Image URL :</label>
-                            <input type="text" class="form-control" placeholder="Enter Image Url" name="imgUrl"
-                                value="<% if(editingMode) {%><%=prod.imgUrl%><%} %>">
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Enter Product Description</label>
-                            <textarea name="description" class="form-control"
-                                rows="3"> <%if(editingMode){%><%=prod.description%><%}%></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price</label>
-                            <input type="number" class="form-control" placeholder="Enter Price" name="price"
-                                value="<%if(editingMode){%><%=prod.price%><%}%>">
-                        </div>
-                        <% if(editingMode) {%>
-                            <input type="hidden" value="<%=prod.id%>" name="productId">
-                            <% } %>
-                                <button type="submit" class="btn btn-outline-success">
-                                    <%=editingMode==="true" ? "Update Product" : "Add Product"%>
-                                </button>
-                    </form>
+                <div class="d-flex align-items-center justify-content-center">
+                    <div>
+                        <form class="product-form" style="width: 18rem;"
+                            action="/admin/<%= editingMode ==='true' ? 'edit-product' : 'add-product' %>" method="POST">
+                            <div class="form-group">
+                                <label for="title">Title : </label>
+                                <input type="text" class="form-control" placeholder="Enter Product Title" name="title"
+                                    value="<% if(editingMode) {%><%= prod.title %><% } %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="imgUrl">Image URL :</label>
+                                <input type="text" class="form-control" placeholder="Enter Image Url" name="imageUrl"
+                                    value="<%= editingMode === 'true' ? prod.imageUrl : ''%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Enter Product Description</label>
+                                <textarea name="description" class="form-control"
+                                    placeholder="Enter Your Product Description"
+                                    rows="3"><%if(editingMode){%><%=prod.description%><%}%></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input type="number" class="form-control" placeholder="Enter Price" name="price"
+                                    value="<%if(editingMode){%><%=prod.price%><%}%>">
+                            </div>
+                            <% if(editingMode) {%>
+                                <input type="hidden" value="<%=prod._id%>" name="productId">
+                                <% } %>
+                                    <button type="submit" class="btn btn-outline-success">
+                                        <%=editingMode==="true" ? "Update Product" : "Add Product" %>
+                                    </button>
+                        </form>
+                    </div>
                 </div>
-               </div>
             </main>
             <%- include('../includes/end') %>

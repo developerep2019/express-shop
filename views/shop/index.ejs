@@ -12,7 +12,7 @@
                         <% prods.map(prod=> { %>
                             <div class="card-group">
                                 <div class="card">
-                                    <img class="card-img-top" src=<%=prod.imgUrl %>>
+                                    <img class="card-img-top" src="<%= prod.imageUrl %>">
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <%= prod.title %>
@@ -28,14 +28,14 @@
                                     </div>
                                 </div>
                             </div>
-                                    <% })%>
+                            <% })%>
 
-                            </div>
-                            <% } else { %>
+                    </div>
+                    <% } else { %>
 
-                                <h1>There is no products in your shop</h1>
+                        <h1>There is no products in your shop</h1>
 
-                                <% } %>
+                        <% } %>
 
             </main>
             <%- include('../includes/end')%>

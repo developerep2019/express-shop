@@ -12,7 +12,7 @@
                         <% prods.map(prod=> { %>
                             <div class="card-group float-left">
                                 <div class="card">
-                                    <img class="card-img-top" src=<%=prod.imgUrl %>>
+                                    <img class="card-img-top" src="<%= prod.imageUrl %>">
                                     <div class="card-body">
                                         <h5 class="card-title">
                                             <%= prod.title %>
@@ -24,7 +24,8 @@
                                         </h4>
                                     </div>
                                     <div class="card-footer"">
-                       <button class="btn btn-outline-success float-left details" onclick="location.href = '/product/<%= prod.id %>'">Details</button>
+                       <button class=" btn btn-outline-success float-left details"
+                                        onclick="location.href = '/product/<%= prod._id %>'">Details</button>
                                         <%- include('../includes/add-to-cart', {prod : prod}) %>
                                     </div>
                                 </div>

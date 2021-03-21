@@ -2,7 +2,7 @@ const ProductModel = require('../models/product.model');
 const CartModel = require('../models/cart.model');
 
 module.exports.getProducts = (req, res, next) => {
-    ProductModel.findAll({ raw: true })
+    ProductModel.fetchAll()
         .then(products => {
             res.render('shop/product-list', {
                 docTitle: "Welcome to the shop",
@@ -16,7 +16,7 @@ module.exports.getProducts = (req, res, next) => {
 
 module.exports.getProduct = (req, res, next) => {
     const prodId = req.params.productId;
-    ProductModel.findByPk(prodId)
+    ProductModel.findById(prodId)
         .then(product => {
             res.render('shop/product-detail', {
                 docTitle: `Details of ${product.title}`,
@@ -27,7 +27,7 @@ module.exports.getProduct = (req, res, next) => {
 }
 
 module.exports.getIndex = (req, res, next) => {
-    ProductModel.findAll({ raw: true })
+    ProductModel.fetchAll()
         .then((result) => {
             res.render('shop/index', {
                 docTitle: "Welcome to the shop",
