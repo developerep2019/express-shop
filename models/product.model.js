@@ -3,12 +3,13 @@ const { ObjectId } = require('bson');
 
 class ProductModel {
 
-    constructor(title, price, description, imageUrl, id) {
+    constructor(title, price, description, imageUrl, id, userId) {
         this.title = title;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
         this._id = id ? new ObjectId(id) : null;
+        this.userId = userId;
     }
 
 
@@ -38,7 +39,6 @@ class ProductModel {
             .find()
             .toArray()
             .then(products => {
-                console.log(products)
                 return products
             })
             .catch(err => console.log(err));

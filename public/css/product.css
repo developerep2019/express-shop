@@ -28,3 +28,7 @@ main {
 .active {
     color : red !important;
 }
+
+.price::-webkit-inner-spin-button,.price::-webkit-outer-spin-button {
+    display : none    
+}

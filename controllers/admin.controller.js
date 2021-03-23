@@ -37,9 +37,7 @@ module.exports.getEditProduct = (req, res, next) => {
 };
 
 module.exports.postEditProducts = (req, res, next) => {
-    // const { productId, imgUrl, title, description, price } = req.body;
     const { title, price, description, imageUrl, productId } = req.body;
-
     const product = new ProductModel(title, price, description, imageUrl, productId);
     product.save()
         .then(result => {
@@ -52,7 +50,7 @@ module.exports.postEditProducts = (req, res, next) => {
 //creating a product via this controller function
 module.exports.createAProduct = (req, res, next) => {
     const { title, price, description, imageUrl } = req.body;
-    const product = new ProductModel(title, price, description, imageUrl)
+    const product = new ProductModel(title, price, description, imageUrl, null, req.user._id)
     product.save()
         .then(() => {
             res.redirect('/admin/products')
