@@ -1,11 +1,32 @@
 <%- include('../includes/head') %>
-<link rel="stylesheet" href="/css/product.css">
-<link rel="stylesheet" href="/css/shop.css">
-</head>
-<body>
-    <%- include('../includes/navigation') %>
-    <main>
-        <h1>This is checkout</h1>
-    </main>
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/shop.css">
+    </head>
 
-    <%- include('../includes/end') %> 
+    <body>
+        <%- include('../includes/navigation') %>
+            <main>
+                <main>
+                    <% if (orders.length <=0) { %>
+                        <h1>Nothing there!</h1>
+                        <% } else { %>
+                            <ul class="orders">
+                                <% orders.forEach(order=> { %>
+                                    <li class="orders__item">
+                                        <h2>Order - #<%= order._id %>
+                                        </h2>
+                                        <ul class="orders__products">
+                                            <% order.products.forEach(p=> { %>
+                                                <li class="orders__products-item">
+                                                    <%= p.product.title %> (<%= p.quantity %>)
+                                                </li>
+                                                <% }); %>
+                                        </ul>
+                                    </li>
+                                    <% }); %>
+                            </ul>
+                            <% } %>
+                </main>
+            </main>
+
+            <%- include('../includes/end') %>

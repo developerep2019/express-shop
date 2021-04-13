@@ -1,4 +1,4 @@
-//dependencies
+//Models
 const { ObjectId } = require('bson');
 const ProductModel = require('../models/product.model');
 
@@ -38,29 +38,47 @@ module.exports.getEditProduct = (req, res, next) => {
 
 module.exports.postEditProducts = (req, res, next) => {
     const { title, price, description, imageUrl, productId } = req.body;
-    const product = new ProductModel(title, price, description, imageUrl, productId);
-    product.save()
-        .then(result => {
-            console.log('UPDATED PRODUCT !!')
-            res.redirect('/admin/products')
+    ProductModel.findById(productId)
+        .then(product => {
+            product.title = title;
+            product.price = price;
+            product.description = description;
+            product.imageUrl = imageUrl;
+            return product.save()
+
         })
-        .catch(err => consols.log(err))
-}
+        .then(() => {
+            res.redirect('/admin/products')
+            console.log('UPDATED PRODUCT');
+        })
+        .catch(err => console.log(err));
+};
 
 //creating a product via this controller function
 module.exports.createAProduct = (req, res, next) => {
     const { title, price, description, imageUrl } = req.body;
-    const product = new ProductModel(title, price, description, imageUrl, null, req.user._id)
+    const product = new ProductModel({
+        title: title,
+        price: price,
+        description: description,
+        imageUrl: imageUrl,
+        userId: req.user
+    });
     product.save()
-        .then(() => {
-            res.redirect('/admin/products')
+        .then(result => {
+            console.log('Product Created');
+            res.redirect('/admin/products');
         })
+        .catch(err => console.log(err));
 };
 
 //Getting all admin products
 module.exports.getAllProductsAdmin = (req, res, next) => {
-    ProductModel.fetchAll()
-        .then((products) => {
+    ProductModel.find()
+        /*        .select('title price -_id')
+                .populate('userId', 'name')*/
+        .then(products => {
+            console.log(products)
             res.render('admin/products', {
                 docTitle: `Admin Products`,
                 prods: products,
@@ -72,7 +90,7 @@ module.exports.getAllProductsAdmin = (req, res, next) => {
 
 module.exports.postDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
-    ProductModel.deleteById(prodId)
+    ProductModel.findByIdAndRemove(prodId)
         .then(() => {
             res.redirect("/admin/products");
             console.log('DELETED !!')
