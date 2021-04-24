@@ -1,12 +1,13 @@
 //dependencies
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
+
+// Global Routes
 const adminRoutes = require("./routes/admin.route");
 const shopRoutes = require("./routes/shop.route");
 const pageNotFoundController = require("./controllers/page-not-found.controller");
-const mongoose = require("mongoose");
-
-// working with database
+const authRoutes = require("./routes/auth.route");
 
 //working with users
 const UserModel = require("./models/user.model");
@@ -31,11 +32,12 @@ app.use((req, res, next) => {
 //routes
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 app.use(pageNotFoundController);
 
 const port = process.env.PORT || 3000;
 
-//
+//mongoose
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 mongoose

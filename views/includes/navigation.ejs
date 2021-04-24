@@ -13,10 +13,15 @@
         </li>
         <li class="nav-item"><a href="/orders" class="nav-link <%= path === '/orders' ? " text-warning" : "" %>
             ">Orders</a></li>
+        <% if(isLoggedIn) {%> 
         <li class="nav-item"><a href="/admin/add-product" class="nav-link <%= path === '/admin/add-product'
             ? " text-warning" : "" %> ">Add Product</a></li>
         <li class="nav-item"><a href="/admin/products" class="nav-link <%= path === '/admin/products' ? " text-warning"
             : "" %> ">Admin Products</a></li>
+            <% } %> 
+        <li class="nav-item">
+          <a href="/login" class="nav-link <%= path === '/login' ? 'text-warning' : '' %>">Login</a>
+        </li>
       </ul>
     </div>
   </div>
