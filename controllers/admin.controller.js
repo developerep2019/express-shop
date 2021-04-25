@@ -72,8 +72,6 @@ module.exports.createAProduct = (req, res, next) => {
 //Getting all admin products
 module.exports.getAllProductsAdmin = (req, res, next) => {
   ProductModel.find()
-    /*        .select('title price -_id')
-                .populate('userId', 'name')*/
     .then((products) => {
       res.render("admin/products", {
         docTitle: `Admin Products`,
