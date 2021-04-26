@@ -2,16 +2,20 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/admin.controller');
 
+//Middlewares
+const isAuth = require('../middlewares/isAuth.middleware');
+
+
 //all the routes will get /admin prefix
 
 // All Routes for Admin --> GET
-router.get('/add-product', adminController.getAddProduct);
-router.get('/products', adminController.getAllProductsAdmin);
-router.get('/edit-product/:productId', adminController.getEditProduct);
+router.get('/add-product', isAuth, adminController.getAddProduct);
+router.get('/products', isAuth, adminController.getAllProductsAdmin);
+router.get('/edit-product/:productId', isAuth, adminController.getEditProduct);
 
 // All Routes for Admin --> POST
-router.post('/add-product', adminController.createAProduct);
-router.post('/edit-product', adminController.postEditProducts);
-router.post('/delete-product', adminController.postDeleteProduct);
+router.post('/add-product', isAuth, adminController.createAProduct);
+router.post('/edit-product', isAuth, adminController.postEditProducts);
+router.post('/delete-product', isAuth, adminController.postDeleteProduct);
 
 module.exports = router;

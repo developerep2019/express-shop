@@ -9,7 +9,6 @@ module.exports.getAddProduct = (req, res, next) => {
     isLoggedIn: req.session.isLoggedIn,
   });
 };
-
 module.exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {

@@ -34,7 +34,6 @@ module.exports.getIndex = (req, res, next) => {
         docTitle: 'Welcome to the shop',
         prods: result,
         path: '/',
-        isLoggedIn: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
@@ -54,6 +53,7 @@ module.exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 module.exports.getCart = (req, res, next) => {
+  console.log(req.user)
   req.user
     .populate('cart.items.productId')
     .execPopulate()
@@ -91,7 +91,7 @@ module.exports.postOrder = (req, res, next) => {
       });
       const order = new OrderModel({
         user: {
-          name: req.user.name,
+          email: req.user.email,
           userId: req.user._id,
         },
         products: products,

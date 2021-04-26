@@ -1,10 +1,14 @@
 //dependencies
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 require('dotenv').config();
+
+//app initialization
+const app = express();
+const csrfProtection = csrf();
 
 //envirement variables -->
 const uri = process.env.MONGO_URI;
@@ -39,6 +43,8 @@ app.use(
     store,
   })
 );
+app.use(csrfProtection);
+
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
@@ -50,6 +56,11 @@ app.use((req, res, next) => {
     })
     .catch((err) => console.log(err));
 });
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+})
 
 //routes
 app.use('/admin', adminRoutes);
@@ -65,18 +76,6 @@ mongoose.set('useUnifiedTopology', true);
 mongoose
   .connect(uri)
   .then((result) => {
-    UserModel.findOne().then((user) => {
-      if (!user) {
-        const user = new UserModel({
-          name: 'Ethun',
-          email: 'developerep2019@gmail.com',
-          cart: {
-            items: [],
-          },
-        });
-        user.save();
-      }
-    });
     app.listen(port, () => console.log(`listening from port ${port}`));
   })
   .catch((err) => console.log(err));

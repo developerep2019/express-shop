@@ -7,7 +7,7 @@
             <main>
                 <div class="d-flex align-items-center justify-content-center">
                     <div>
-                        <form class="product-form" style="width: 18rem;" action="/login" method="POST">
+                        <form class="product-form" style="width: 18rem;" action="/signup" method="POST">
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <div class="form-group">
                                 <label for="email">Email : </label>
@@ -17,7 +17,12 @@
                                 <label for="password">Password : </label>
                                 <input type="password" class="form-control" placeholder="Your Password" name="password">
                             </div>
-                            <button type="submit" class="btn btn-outline-success">Login</button>
+                            <div class="form-group">
+                                <label for="password">Confirm Password : </label>
+                                <input type="password" class="form-control" placeholder="Your Password"
+                                    name="confirmPassword">
+                            </div>
+                            <button type="submit" class="btn btn-outline-success">Sign Up</button>
                         </form>
                     </div>
                 </div>

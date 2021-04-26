@@ -9,27 +9,36 @@
         <li class="nav-item"><a href="/" class="nav-link <%= path === '/' ? " text-warning" : "" %> ">Shop</a></li>
         <li class="nav-item"><a href="/products" class="nav-link <%= path === '/products' ? " text-warning" : "" %>
             ">Products</a></li>
-            <% if(isLoggedIn) {%> 
-        <li class="nav-item"><a href="/cart" class="nav-link <%= path === '/cart' ? " text-warning" : "" %> ">Cart</a>
-        </li>
-        <li class="nav-item"><a href="/orders" class="nav-link <%= path === '/orders' ? " text-warning" : "" %>
-            ">Orders</a></li>
-        <li class="nav-item"><a href="/admin/add-product" class="nav-link <%= path === '/admin/add-product'
-            ? " text-warning" : "" %> ">Add Product</a></li>
-        <li class="nav-item"><a href="/admin/products" class="nav-link <%= path === '/admin/products' ? " text-warning"
-            : "" %> ">Admin Products</a></li>
-            <% } %> 
-            <% if(!isLoggedIn) {%> 
-        <li class="nav-item">
-          <a href="/login" class="nav-link <%= path === '/login' ? 'text-warning' : '' %>">Login</a>
-        </li>
-        <% } else { %>
-          <li class="nav-item">
-            <form action="/logout" method="POST">
-            <input class="nav-link logout" type="submit" value="Logout"/>
-          </form>
+        <% if(isLoggedIn) {%>
+          <li class="nav-item"><a href="/cart" class="nav-link <%= path === '/cart' ? " text-warning" : "" %> ">Cart</a>
           </li>
-          <% } %>  
+          <li class="nav-item"><a href="/orders" class="nav-link <%= path === '/orders' ? " text-warning" : "" %>
+              ">Orders</a></li>
+          <li class="nav-item"><a href="/admin/add-product" class="nav-link <%= path === '/admin/add-product'
+            ? " text-warning" : "" %> ">Add Product</a></li>
+          <li class="nav-item"><a href="/admin/products" class="nav-link <%= path === '/admin/products'?" text-warning"
+              : "" %> ">Admin Products</a></li>
+          <% } %>
+            <% if(!isLoggedIn) {%>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="/login"
+                  class="nav-link <%= path === '/login' ? 'text-warning' : '' %> dropdown-toggle" id="navbarDropdown"
+                  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Login
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/login">Login</a>
+                  <a class="dropdown-item" href="/signup">Sign Up</a>
+                </div>
+              </li>
+              <% } else { %>
+                <li class="nav-item">
+                  <form action="/logout" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input class="nav-link logout" type="submit" value="Logout" />
+                  </form>
+                </li>
+                <% } %>
       </ul>
     </div>
   </div>
