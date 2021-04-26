@@ -1,32 +1,32 @@
 //Models
-const ProductModel = require("../models/product.model");
+const ProductModel = require('../models/product.model');
 
 module.exports.getAddProduct = (req, res, next) => {
-  res.render("admin/edit-product", {
-    docTitle: "Add a product",
-    path: "/admin/add-product",
+  res.render('admin/edit-product', {
+    docTitle: 'Add a product',
+    path: '/admin/add-product',
     editingMode: false,
-    isLoggedIn: req.isLoggedIn,
+    isLoggedIn: req.session.isLoggedIn,
   });
 };
 
 module.exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {
-    return res.redirect("/");
+    return res.redirect('/');
   }
   const prodId = req.params.productId;
   ProductModel.findById(prodId)
     .then((product) => {
       if (!product) {
-        return res.redirect("/");
+        return res.redirect('/');
       } else {
-        res.render("admin/edit-product", {
+        res.render('admin/edit-product', {
           editingMode: editMode,
-          docTitle: "Edit Product",
+          docTitle: 'Edit Product',
           prod: product,
-          path: "/edit-product",
-          isLoggedIn: req.isLoggedIn,
+          path: '/edit-product',
+          isLoggedIn: req.session.isLoggedIn,
         });
       }
     })
@@ -44,8 +44,8 @@ module.exports.postEditProducts = (req, res, next) => {
       return product.save();
     })
     .then(() => {
-      res.redirect("/admin/products");
-      console.log("UPDATED PRODUCT");
+      res.redirect('/admin/products');
+      console.log('UPDATED PRODUCT');
     })
     .catch((err) => console.log(err));
 };
@@ -63,8 +63,8 @@ module.exports.createAProduct = (req, res, next) => {
   product
     .save()
     .then((result) => {
-      console.log("Product Created");
-      res.redirect("/admin/products");
+      console.log('Product Created');
+      res.redirect('/admin/products');
     })
     .catch((err) => console.log(err));
 };
@@ -73,11 +73,11 @@ module.exports.createAProduct = (req, res, next) => {
 module.exports.getAllProductsAdmin = (req, res, next) => {
   ProductModel.find()
     .then((products) => {
-      res.render("admin/products", {
+      res.render('admin/products', {
         docTitle: `Admin Products`,
         prods: products,
-        path: "/admin/products",
-        isLoggedIn: req.isLoggedIn,
+        path: '/admin/products',
+        isLoggedIn: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
@@ -87,8 +87,8 @@ module.exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   ProductModel.findByIdAndRemove(prodId)
     .then(() => {
-      res.redirect("/admin/products");
-      console.log("DELETED !!");
+      res.redirect('/admin/products');
+      console.log('DELETED !!');
     })
     .catch((err) => console.log(err));
 };

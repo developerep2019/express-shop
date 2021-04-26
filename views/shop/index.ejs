@@ -24,7 +24,12 @@
                                         </h4>
                                     </div>
                                     <div class="card-footer">
-                                        <%- include('../includes/add-to-cart', {prod : prod}) %>
+                                        <% if(isLoggedIn) {%> 
+                                            <%- include('../includes/add-to-cart', {prod : prod}) %>
+                                            <% } else { %> 
+                                                <button class=" btn btn-outline-success float-left details"
+                                                onclick="location.href = '/product/<%= prod._id %>'">Details</button>
+                                                <% } %>   
                                     </div>
                                 </div>
                             </div>

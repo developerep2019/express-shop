@@ -18,7 +18,9 @@
                 <p>
                     <%= prod.description %>
                 </p>
-                <%- include('../includes/add-to-cart', {prod : prod}) %>
+                <% if(isLoggedIn) {%> 
+                    <%- include('../includes/add-to-cart', {prod : prod}) %>
+                    <% } %> 
             </main>
 
             <%- include('../includes/end') %>

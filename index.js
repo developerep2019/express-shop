@@ -36,10 +36,14 @@ app.use(
     secret: 'xZI9M57QreeUopF0',
     resave: false,
     saveUninitialized: false,
+    store,
   })
 );
 app.use((req, res, next) => {
-  UserModel.findById('606c7967dc4f1511a80033cd')
+  if (!req.session.user) {
+    return next();
+  }
+  UserModel.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
       next();
