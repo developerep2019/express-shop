@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const transport = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: parseFloat(process.env.SMTP_PORT),
+  port: process.env.SMTP_PORT,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
@@ -154,8 +154,7 @@ module.exports.postReset = (req, res, next) => {
           subject: 'password Reset Request',
           html: `
           <p>Password Reset Request</p>
-          <p>Please Click this <a href='http://localhost:3000/reset/${token}'>link</a>  
-          `
+          <p>Please Click this <a href='http://localhost:3000/reset/${token}'>link</a>`
         })
       })
       .catch(err => console.log(err, 'from auth error'))
@@ -177,8 +176,32 @@ module.exports.getNewPassword = (req, res, next) => {
         path: '/new-password',
         docTitle: "Enter new Password",
         errorMessage: message,
-        userId: user._id.toString()
+        userId: user._id.toString(),
+        passwordToken: token
       })
     })
     .catch(err => console.log(err))
+}
+
+module.exports.postNewPassword = (req, res, next) => {
+  const { newPassword, userId, passwordToken } = req.body;
+  console.log(newPassword);
+  let resetUser;
+
+  UserModel.findOne({ resetToken: passwordToken, resetTokenExpires: { $gt: Date.now() }, _id: userId })
+    .then(user => {
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then(hashedPass => {
+      resetUser.password = hashedPass;
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpires = undefined;
+      return resetUser.save();
+    })
+    .then(result => {
+      res.redirect('/login')
+    })
+    .catch(err => console.log(err))
+
 }
