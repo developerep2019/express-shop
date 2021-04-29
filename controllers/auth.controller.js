@@ -1,14 +1,16 @@
 const UserModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+require('dotenv').config();
 
 
 const transport = nodemailer.createTransport({
-  host: 'smtp.mailgun.org',
+  host: process.env.SMTP_HOST,
   port: 587,
   auth: {
-    user: "postmaster@sandbox52871f9cf2284b08829158f034eea6c4.mailgun.org",
-    pass: "9f52b9ec21fbbcb5c52737e075433281-4b1aa784-7d1876fa",
+    user: "",
+    pass: "",
   }
 });
 
@@ -125,4 +127,40 @@ module.exports.getReset = (req, res, next) => {
     docTitle: 'Reset Password',
     errorMessage: message
   })
-}
+};
+
+module.exports.postReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/reset');
+    }
+    const token = buffer.toString('hex');
+    UserModel.findOne({ email: req.body.email })
+      .then(user => {
+        console.log(user);
+        if (!user) {
+          req.flash('error', `No Account with Email ${req.body.email}`);
+          return res.redirect('/reset')
+        }
+        user.resetToken = token;
+        user.resetTokenExpires = Date.now() + 3600000;
+        return user.save();
+      })
+      .then(result => {
+        console.log(process.env.SMTP_HOST)
+        transport.sendMail({
+          to: req.body.email,
+          from: 'shop@express-shop.com',
+          subject: 'password Reset Request',
+          html: `
+          <p>Password Reset Request</p>
+          <p>Please Click this <a href='http://localhost:3000/reset/${token}'>link</a>
+          
+          
+          `
+        })
+      })
+      .catch(err => console.log(err, 'from auth error'))
+  })
+};
