@@ -6,7 +6,6 @@ module.exports.getAddProduct = (req, res, next) => {
     docTitle: 'Add a product',
     path: '/admin/add-product',
     editingMode: false,
-    isLoggedIn: req.session.isLoggedIn,
   });
 };
 module.exports.getEditProduct = (req, res, next) => {
@@ -25,7 +24,6 @@ module.exports.getEditProduct = (req, res, next) => {
           docTitle: 'Edit Product',
           prod: product,
           path: '/edit-product',
-          isLoggedIn: req.session.isLoggedIn,
         });
       }
     })
@@ -76,7 +74,6 @@ module.exports.getAllProductsAdmin = (req, res, next) => {
         docTitle: `Admin Products`,
         prods: products,
         path: '/admin/products',
-        isLoggedIn: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
