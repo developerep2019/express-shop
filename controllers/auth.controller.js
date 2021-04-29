@@ -2,18 +2,17 @@ const UserModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-require('dotenv').config();
 
+require('dotenv').config();
 
 const transport = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: 587,
+  port: parseFloat(process.env.SMTP_PORT),
   auth: {
-    user: "",
-    pass: "",
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
   }
-});
-
+})
 
 module.exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
@@ -99,13 +98,13 @@ module.exports.postSignUp = (req, res, next) => {
           return user.save();
         })
         .then(() => {
-          res.redirect('/login')
+          res.redirect('/login');
           return transport.sendMail({
             to: email,
             from: 'shop@expressshop.com',
-            subject: 'SignUp Complete',
+            subject: 'SignUp Completed',
             html: '<h1>Thanks for Creating an account in express shop</h1>'
-          })
+          });
         })
         .catch(err => {
           console.log(err, "from mail error");
@@ -148,19 +147,38 @@ module.exports.postReset = (req, res, next) => {
         return user.save();
       })
       .then(result => {
-        console.log(process.env.SMTP_HOST)
+        res.redirect('/')
         transport.sendMail({
           to: req.body.email,
           from: 'shop@express-shop.com',
           subject: 'password Reset Request',
           html: `
           <p>Password Reset Request</p>
-          <p>Please Click this <a href='http://localhost:3000/reset/${token}'>link</a>
-          
-          
+          <p>Please Click this <a href='http://localhost:3000/reset/${token}'>link</a>  
           `
         })
       })
       .catch(err => console.log(err, 'from auth error'))
   })
 };
+
+module.exports.getNewPassword = (req, res, next) => {
+  const token = req.params.token;
+  UserModel.findOne({ resetToken: token, resetTokenExpires: { $gt: Date.now() } })
+    .then(user => {
+      let message = req.flash('error');
+      if (message.length > 0) {
+        message = message[0];
+      }
+      else {
+        message = null;
+      }
+      res.render('auth/new-password', {
+        path: '/new-password',
+        docTitle: "Enter new Password",
+        errorMessage: message,
+        userId: user._id.toString()
+      })
+    })
+    .catch(err => console.log(err))
+}
