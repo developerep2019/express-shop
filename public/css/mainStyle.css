@@ -22,4 +22,8 @@
 
 @media (min-width : 768px) {
   .user-message {width: 30rem;}
-} 
+}
+
+input.invalid, textarea.invalid {
+  border-color: red;
+}

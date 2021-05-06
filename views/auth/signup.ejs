@@ -12,21 +12,27 @@
                     <% } %>
                         <div class="d-flex align-items-center justify-content-center">
                             <div>
-                                <form class="product-form" style="width: 18rem;" action="/signup" method="POST">
+                                <form class="product-form" style="width: 18rem;" action="/signup" method="POST"
+                                    novalidate>
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <div class="form-group">
                                         <label for="email">Email : </label>
-                                        <input type="email" class="form-control" placeholder="Enter Email" name="email">
+                                        <input type="email"
+                                            class="form-control <%= validationErrors.find(e => e.param === 'email') ? 'invalid' : ''%> "
+                                            placeholder="Enter Email" name="email" value="<%= oldInput.email %>">
                                     </div>
                                     <div class="form-group">
                                         <label for="password">Password : </label>
-                                        <input type="password" class="form-control" placeholder="Your Password"
-                                            name="password">
+                                        <input type="password"
+                                            class="form-control  <%= validationErrors.find(e => e.param === 'password') ? 'invalid' : ''%> "
+                                            placeholder="Your Password" name="password" value="<%= oldInput.password%>">
                                     </div>
                                     <div class="form-group">
                                         <label for="password">Confirm Password : </label>
-                                        <input type="password" class="form-control" placeholder="Your Password"
-                                            name="confirmPassword">
+                                        <input type="password"
+                                            class="form-control  <%= validationErrors.find(e => e.param === 'confirmPassword') ? 'invalid' : ''%> "
+                                            placeholder="Your Password" name="confirmPassword"
+                                            value="<%=oldInput.password%>">
                                     </div>
                                     <button type="submit" class="btn btn-outline-success">Sign Up</button>
                                 </form>

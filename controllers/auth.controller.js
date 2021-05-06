@@ -2,6 +2,7 @@ const UserModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const { validationResult } = require('express-validator');
 
 require('dotenv').config();
 
@@ -25,11 +26,19 @@ module.exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
     docTitle: 'Login',
-    errorMessage: message
+    errorMessage: message,
+    oldInput: { email: '' }
   });
 };
 
 module.exports.postLogin = (req, res, next) => {
+  let message = req.flash('error');
+  if (message.length > 0) {
+    message = message[0];
+  }
+  else {
+    message = null;
+  }
   const { email, password } = req.body;
   UserModel.findOne({ email })
     .then((user) => {
@@ -47,7 +56,12 @@ module.exports.postLogin = (req, res, next) => {
               res.redirect('/');
             });
           };
-          res.redirect('/login');
+          res.render('auth/login', {
+            path: '/login',
+            docTitle: 'Login',
+            errorMessage: message,
+            oldInput: { email }
+          });
         })
         .catch(err => {
           console.log(err);
@@ -75,42 +89,48 @@ module.exports.getSignUp = (req, res, next) => {
   res.render('auth/signup', {
     docTitle: 'Sign Up',
     path: '/signup',
-    errorMessage: message
+    errorMessage: message,
+    oldInput: { email: '', password: '', passwordConfirm: '' },
+    validationErrors: []
   })
-}
+};
 
 module.exports.postSignUp = (req, res, next) => {
-  const { email, password, confirmPassword } = req.body;
-  UserModel.findOne({ email })
-    .then(userDoc => {
-      if (userDoc) {
-        req.flash('error', 'E-Mail exists already, please pick a different one');
-        return res.redirect('/signup');
-      }
-      return bcrypt
-        .hash(password, 12)
-        .then(hashedPass => {
-          const user = new UserModel({
-            email,
-            password: hashedPass,
-            cart: { item: [] }
-          });
-          return user.save();
-        })
-        .then(() => {
-          res.redirect('/login');
-          return transport.sendMail({
-            to: email,
-            from: 'shop@expressshop.com',
-            subject: 'SignUp Completed',
-            html: '<h1>Thanks for Creating an account in express shop</h1>'
-          });
-        })
-        .catch(err => {
-          console.log(err, "from mail error");
-        })
+  const { email, password } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array(), "from express validator");
+    return res.status(422)
+      .render('auth/signup', {
+        docTitle: 'Sign Up',
+        path: '/signup',
+        errorMessage: errors.array()[0].msg,
+        oldInput: { email, password, confirmPassword: req.body.confirmPassword },
+        validationErrors: errors.array()
+      });
+  };
+  bcrypt
+    .hash(password, 12)
+    .then(hashedPass => {
+      const user = new UserModel({
+        email,
+        password: hashedPass,
+        cart: { item: [] }
+      });
+      return user.save();
     })
-    .catch(err => console.log(err))
+    .then(() => {
+      res.redirect('/login');
+      return transport.sendMail({
+        to: email,
+        from: 'shop@expressshop.com',
+        subject: 'SignUp Completed',
+        html: '<h1>Thanks for Creating an account in express shop</h1>'
+      });
+    })
+    .catch(err => {
+      console.log(err, "from mail error");
+    })
 };
 
 module.exports.getReset = (req, res, next) => {
@@ -181,7 +201,7 @@ module.exports.getNewPassword = (req, res, next) => {
       })
     })
     .catch(err => console.log(err))
-}
+};
 
 module.exports.postNewPassword = (req, res, next) => {
   const { newPassword, userId, passwordToken } = req.body;
@@ -204,4 +224,4 @@ module.exports.postNewPassword = (req, res, next) => {
     })
     .catch(err => console.log(err))
 
-}
+};
