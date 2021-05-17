@@ -17,7 +17,7 @@ const uri = process.env.MONGO_URI;
 // Global Routes
 const adminRoutes = require('./routes/admin.route');
 const shopRoutes = require('./routes/shop.route');
-const pageNotFoundController = require('./controllers/page-not-found.controller');
+const errorControllers = require('./controllers/error.controller');
 const authRoutes = require('./routes/auth.route');
 
 //working with users
@@ -53,10 +53,15 @@ app.use((req, res, next) => {
   }
   UserModel.findById(req.session.user._id)
     .then((user) => {
+      if (!user) {
+        return next();
+      }
       req.user = user;
       next();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      throw new Error(err);
+    });
 });
 app.use((req, res, next) => {
   res.locals.isLoggedIn = req.session.isLoggedIn;
@@ -68,7 +73,8 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
-app.use(pageNotFoundController);
+app.get('/500', errorControllers.get500);
+app.use(errorControllers.get404);
 
 const port = process.env.PORT || 3000;
 

@@ -95,7 +95,8 @@ module.exports.createAProduct = (req, res, next) => {
       },
       hasError: true,
       path: '/edit-product',
-      errorMessage: errors.array()[0].msg
+      errorMessage: errors.array()[0].msg,
+      validationErrors: []
     });
   }
   const product = new ProductModel({
@@ -111,7 +112,9 @@ module.exports.createAProduct = (req, res, next) => {
       console.log('Product Created');
       res.redirect('/admin/products');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      res.redirect('/500')
+    });
 };
 
 //Getting all admin products
