@@ -2,6 +2,9 @@
 const ProductModel = require('../models/product.model');
 const OrderModel = require('../models/order.model');
 
+//utilities 
+const errorHandler = require('../utilities/error.util');
+
 module.exports.getProducts = (req, res, next) => {
   ProductModel.find()
     .then((products) => {
@@ -11,7 +14,9 @@ module.exports.getProducts = (req, res, next) => {
         path: '/products',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      errorHandler.handle500(err, next);
+    })
 };
 
 module.exports.getProduct = (req, res, next) => {
@@ -34,7 +39,9 @@ module.exports.getIndex = (req, res, next) => {
         path: '/',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      errorHandler.handle500(err, next);
+    })
 };
 
 module.exports.postCartDeleteProduct = (req, res, next) => {
@@ -45,9 +52,8 @@ module.exports.postCartDeleteProduct = (req, res, next) => {
       res.redirect('/cart');
     })
     .catch((err) => {
-      console.log(err, 'from err');
-      console.log(err);
-    });
+      errorHandler.handle500(err, next);
+    })
 };
 
 module.exports.getCart = (req, res, next) => {
@@ -64,7 +70,9 @@ module.exports.getCart = (req, res, next) => {
         products: user.cart.items,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      errorHandler.handle500(err, next);
+    })
 };
 
 module.exports.postCart = (req, res, next) => {
@@ -75,6 +83,8 @@ module.exports.postCart = (req, res, next) => {
     })
     .then((result) => {
       res.redirect('/cart');
+    }).catch((err) => {
+      errorHandler.handle500(err, next);
     });
 };
 
@@ -97,7 +107,9 @@ module.exports.postOrder = (req, res, next) => {
     })
     .then((result) => req.user.clearCart())
     .then(() => res.redirect('/orders'))
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      errorHandler.handle500(err, next);
+    })
 };
 
 module.exports.getOrders = (req, res, next) => {

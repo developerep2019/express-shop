@@ -5,10 +5,10 @@ module.exports.get404 = (req, res, next) => {
   });
 };
 
-module.exports.get500 = (req, res, next) => {
-  res.status(500).render('500', {
+module.exports.get500 = (error, req, res, next) => {
+  res.status(error.httpStatusCode).render('500', {
     docTitle: 'Internal server error',
     path: '/500',
     isAuthenticated: req.session.isLoggedIn
   })
-}
+};

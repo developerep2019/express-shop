@@ -3,8 +3,9 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const { validationResult } = require('express-validator');
-
 require('dotenv').config();
+
+const errorHandler = require('../utilities/error.util');
 
 const transport = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -67,8 +68,9 @@ module.exports.postLogin = (req, res, next) => {
           console.log(err);
           res.redirect('/login')
         })
+    }).catch((err) => {
+      errorHandler.handle500(err, next);
     })
-    .catch((err) => console.log(err));
 };
 
 module.exports.postLogOut = (req, res, next) => {
@@ -127,9 +129,9 @@ module.exports.postSignUp = (req, res, next) => {
         subject: 'SignUp Completed',
         html: '<h1>Thanks for Creating an account in express shop</h1>'
       });
-    })
-    .catch(err => {
-      console.log(err, "from mail error");
+    }).catch((err) => {
+      console.log('mail server error')
+      errorHandler.handle500(err, next);
     })
 };
 
@@ -177,7 +179,9 @@ module.exports.postReset = (req, res, next) => {
           <p>Please Click this <a href='http://localhost:3000/reset/${token}'>link</a>`
         })
       })
-      .catch(err => console.log(err, 'from auth error'))
+      .catch((err) => {
+        errorHandler.handle500(err, next);
+      })
   })
 };
 
@@ -200,7 +204,9 @@ module.exports.getNewPassword = (req, res, next) => {
         passwordToken: token
       })
     })
-    .catch(err => console.log(err))
+    .catch((err) => {
+      errorHandler.handle500(err, next);
+    })
 };
 
 module.exports.postNewPassword = (req, res, next) => {
@@ -221,7 +227,8 @@ module.exports.postNewPassword = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login')
+    }).catch((err) => {
+      errorHandler.handle500(err, next);
     })
-    .catch(err => console.log(err))
 
 };

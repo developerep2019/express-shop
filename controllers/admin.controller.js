@@ -1,7 +1,14 @@
+// test credintials 
+const { ObjectId } = require('mongodb');
+
 //Models
 const ProductModel = require('../models/product.model');
 const { validationResult } = require('express-validator');
 
+//utilities 
+const errorHandler = require('../utilities/error.util');
+
+//main controllers
 module.exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
     docTitle: 'Add a product',
@@ -34,7 +41,7 @@ module.exports.getEditProduct = (req, res, next) => {
         });
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => errorHandler.handle500(err, next));
 };
 
 module.exports.postEditProducts = (req, res, next) => {
@@ -74,7 +81,9 @@ module.exports.postEditProducts = (req, res, next) => {
           console.log('UPDATED PRODUCT');
         })
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      errorHandler.handle500(err, next);
+    })
 };
 
 //creating a product via this controller function
@@ -113,7 +122,7 @@ module.exports.createAProduct = (req, res, next) => {
       res.redirect('/admin/products');
     })
     .catch((err) => {
-      res.redirect('/500')
+      errorHandler.handle500(err, next);
     });
 };
 
@@ -127,7 +136,9 @@ module.exports.getAllProductsAdmin = (req, res, next) => {
         path: '/admin/products',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      errorHandler.handle500(err, next);
+    })
 };
 
 module.exports.postDeleteProduct = (req, res, next) => {
@@ -137,5 +148,7 @@ module.exports.postDeleteProduct = (req, res, next) => {
       res.redirect('/admin/products');
       console.log('DELETED !!');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      errorHandler.handle500(err, next);
+    })
 };

@@ -7,6 +7,9 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 require('dotenv').config();
 
+// Utilities 
+const errorHandler = require('./utilities/error.util');
+
 //app initialization
 const app = express();
 const csrfProtection = csrf();
@@ -17,8 +20,10 @@ const uri = process.env.MONGO_URI;
 // Global Routes
 const adminRoutes = require('./routes/admin.route');
 const shopRoutes = require('./routes/shop.route');
-const errorControllers = require('./controllers/error.controller');
 const authRoutes = require('./routes/auth.route');
+
+// Error Responses
+const errorControllers = require('./controllers/error.controller');
 
 //working with users
 const UserModel = require('./models/user.model');
@@ -48,6 +53,12 @@ app.use(csrfProtection);
 app.use(flash());
 
 app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
+app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
@@ -60,21 +71,17 @@ app.use((req, res, next) => {
       next();
     })
     .catch((err) => {
-      throw new Error(err);
+      errorHandler.handle500(err, next);
     });
 });
-app.use((req, res, next) => {
-  res.locals.isLoggedIn = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-  next();
-})
+
 
 //routes
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
-app.get('/500', errorControllers.get500);
 app.use(errorControllers.get404);
+app.use(errorControllers.get500);
 
 const port = process.env.PORT || 3000;
 
